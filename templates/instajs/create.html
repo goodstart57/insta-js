@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block body %}
+<div class="row">
+  <form method="POST" class="col-12">
+    <!--모델 폼-->
+    <!--{{ form }}-->
+    {% bootstrap_form form %}  
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">업로드</button>
+  </form>
+</div>
+{% endblock %}
