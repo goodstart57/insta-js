@@ -121,3 +121,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+## 이미지를 프로젝트에 저장하고 불러오도록 설정
+# 미디어 파일들이 불릴 URL
+MEDIA_URL = '/media/'
+# 실제 저장 장소
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
