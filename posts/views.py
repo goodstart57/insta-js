@@ -9,7 +9,7 @@ def create(request):
         form = PostForm(request.POST)
         if form.is_valid():
             form.save()
-        return redirect('posts:create')
+        return redirect('posts:list')
     else:
         # post를 작성하는 form을 보여줌
         form = PostForm()

@@ -7,13 +7,13 @@ from . import models
 class PostForm(forms.ModelForm):
     # 1. 어떤 input 필드를 가지는지 정하기
     content = forms.CharField(
-        label="content",
+        label="content", # label: html에서 붙일 이름
         widget=forms.Textarea(attrs={
             'placeholder': "오늘은 무엇을 하셨나요?"
         })
-    ) # label: html에서 붙일 이름
+    )
     # 2. 해당 input 필드 속성 추가
     class Meta:
         model = models.Post
-        fields = ['content',]
+        fields = ['content', 'image']
     
