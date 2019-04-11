@@ -3,18 +3,24 @@
   <div class="row justify-content-center">
     {% if posts %}
       {% for post in posts %}
-      <div class="card my-3" style="width: 40rem;">
+      <div class="card m-3" style="width: 20rem;">
         {% if post.image %}
         <img src="{{ post.image.url }}" class="card-img-top" alt="user image">
         {% else %}
         <img src="https://picsum.photos/400/300/?random" class="card-img-top" alt="user image">
         {% endif %}
+        <div class="card-header">
+          <span>{{ post.user }}</span>
+        </div>
         <div class="card-body">
           <p class="card-text">{{ post.content }}</p>
+          <!-- 작성자만 수정/삭제 가능 -->
+          {% if post.user == request.user %}
           <div class="btn-group" role="group" aria-label="Basic example">
             <a href="{% url 'posts:update' post.id %}" class="btn btn-success">수정</a>
             <a href="{% url 'posts:delete' post.id %}" class="btn btn-danger">삭제</a>
           </div>
+          {% endif %}
         </div>
       </div>
       {% endfor %}

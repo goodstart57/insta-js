@@ -21,10 +21,10 @@ def list(request):
     return render(request, 'instajs/list.html', {'posts': Post.objects.all()})
 
 
-@require_POST
 def delete(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
-    post.delete()
+    if post.user == request.user:
+        post.delete()
     return redirect('posts:list')
     
 
@@ -33,7 +33,7 @@ def update(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES, instance=post)
-        if form.is_valid():
+        if post.user == request.user and form.is_valid():
             form.save()
         return redirect('posts:list')
     else:
