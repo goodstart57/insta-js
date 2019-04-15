@@ -39,3 +39,22 @@ def update(request, post_id):
     else:
         form = PostForm(instance=post)
         return render(request, 'instajs/update.html', {'form': form})
+
+
+def like(request, post_id):
+    """유저가 게시물을 좋아요하는 기능
+    1. like를 추가할 포스트를 가져옴
+    2. 유저가 해당 포스트를 이미 like 했다면,
+            like 제거
+       아니라면,
+            like 추가
+    """
+    post = get_object_or_404(Post, id=post_id)
+    
+    if request.user in post.like_users.all():
+        post.like_users.remove(request.user)
+    else:
+        post.like_users.add(request.user)
+    
+    return redirect('posts:list')
+        

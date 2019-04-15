@@ -7,5 +7,6 @@ class Post(models.Model):
     image = models.ImageField(blank=True)
     # user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_posts", blank=True)
     
-    __str__ = __repr__ = lambda self: self.content
+    __str__ = __repr__ = lambda self: f"{self.id}) {self.content}"
