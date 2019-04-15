@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST  # POST외의 요청 무시
+from django.contrib.auth.decorators import login_required  # 로그인 되어있을 때만 허용
 
 from .models import Post
 from .forms import PostForm
@@ -41,6 +42,7 @@ def update(request, post_id):
         return render(request, 'instajs/update.html', {'form': form})
 
 
+@login_required
 def like(request, post_id):
     """유저가 게시물을 좋아요하는 기능
     1. like를 추가할 포스트를 가져옴

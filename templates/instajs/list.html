@@ -22,6 +22,19 @@
           </div>
           {% endif %}
         </div>
+        <!-- 좋아요 버튼 추가 -->
+        <div class="card-body">
+          <a href="{% url 'posts:like' post.id %}">
+            {% if user in post.like_users.all %}
+            <i class="fas fa-heart"></i>
+            {% else %}
+            <i class="far fa-heart"></i>
+            {% endif %}
+          </a>
+        </div>
+        <div class="card-text">
+          {{ post.like_users.count }}명이 좋아합니다.
+        </div>
       </div>
       {% endfor %}
     {% endif %}
