@@ -3,11 +3,14 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
+from accounts import views as accounts_views
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('posts/', include('posts.urls')),
     path('accounts/', include('accounts.urls')),
+    path('<str:username>/', accounts_views.people, name='people'),
 ]
 
 # static(통과시키고자 하는 url, 실제 저장 장소)

@@ -1,11 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import (
     login as auth_login,
-    logout as auth_logout
+    logout as auth_logout,
+    get_user_model,
 )
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 from .forms import LoginForm
+    
+
 
 def login(request):
     if request.method == "POST":
@@ -34,4 +37,14 @@ def signup(request):
         return redirect("posts:list")
     else:  # GET: 유저 정보 입력
         return render(request, 'accounts/signup.html', {'form': UserCreationForm()})
+
+
+def people(request, username):
+    # 사용자에 대한 정보
+    # 1. django.contrib.auth.get_user_model()
+    # 2. django.conf.settings.AUTH_USER
+    # 3. django.contrib.auth.models.User (X)
+    person = get_object_or_404(get_user_model(), username=username)
+    return render(request, 'accounts/people.html', {'people': person})
+    
     
