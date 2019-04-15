@@ -24,11 +24,11 @@
         </div>
         <!-- 좋아요 버튼 추가 -->
         <div class="card-body">
-          <a href="{% url 'posts:like' post.id %}">
+          <a class="side-menu" href="{% url 'posts:like' post.id %}">
             {% if user in post.like_users.all %}
-            <i class="fas fa-heart"></i>
+            <i class="fas fa-heart like"></i>
             {% else %}
-            <i class="far fa-heart"></i>
+            <i class="far fa-heart liked"></i>
             {% endif %}
           </a>
         </div>

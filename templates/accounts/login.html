@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+{% block body %}
+<h1 class="text-center">로그인</h1>
+<form method="POST" class="my-4">
+  {% bootstrap_form form %}
+  <button type="submit" class="btn btn-primary w-100">로그인</button>
+  {% csrf_token %}
+</form>
+{% endblock %}

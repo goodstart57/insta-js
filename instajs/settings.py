@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['insta-js-goodstart.c9users.io']
 
 INSTALLED_APPS = [
     'posts',
+    'accounts',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
