@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block body %}
+<form method="POST">
+  {% csrf_token %}
+  <p>정말로 탈퇴하시겠습니까 ㅠㅠㅠㅠ</p>
+  <button class="btn btn-danger" type="submit">미안해요</button>
+</form>
+{% endblock %}

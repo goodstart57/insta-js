@@ -3,11 +3,17 @@ from django.contrib.auth import (
     login as auth_login,
     logout as auth_logout,
     get_user_model,
+    update_session_auth_hash,
 )
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-
-from .forms import LoginForm
-    
+from django.contrib.auth.forms import (
+    AuthenticationForm,
+    UserCreationForm,
+    UserChangeForm,
+    PasswordChangeForm,
+)
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
+from .forms import CustomUserChangeForm
 
 
 def login(request):
@@ -47,4 +53,44 @@ def people(request, username):
     person = get_object_or_404(get_user_model(), username=username)
     return render(request, 'accounts/people.html', {'people': person})
     
-    
+
+@login_required
+def update(request):
+    """회원 정보 변경"""
+    if request.method == "POST":
+        user_change_form = CustomUserChangeForm(request.POST, instance=request.user)
+        
+        if user_change_form.is_valid():
+            user = user_change_form.save()
+        else:
+            user = request.user
+        
+        return redirect("people", user.username)
+    else:  # GET
+        user_change_form = CustomUserChangeForm(instance=request.user)
+        return render(request, 'accounts/update.html', {'user_change_form': user_change_form})
+
+
+@login_required
+def delete(request):
+    """회원 탈퇴"""
+    if request.method == "POST":
+        request.user.delete()
+        return redirect("accounts:signup")
+    else:
+        return render(request, 'accounts/delete.html')
+
+
+@login_required
+def password(request):
+    """비밀번호 변경"""
+    if request.method == "POST":
+        password_chage_form = PasswordChangeForm(request.user, request.POST)
+        if password_chage_form.is_valid():
+            password_chage_form.save()
+            update_session_auth_hash(request, request.user)
+        return redirect("people", request.user)
+    else:
+        password_chage_form = PasswordChangeForm(request.user)
+        return render(request, 'accounts/password.html', {'password_chage_form': password_chage_form})
+        

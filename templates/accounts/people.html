@@ -2,7 +2,18 @@
 
 {% block body %}
 <div class="container">
-  <h1>{{ people.username }}</h1>
+  <div class="card">
+    <div class="card-body">
+      <h1 class="card-title">{{ people.username }}</h1>
+      <div class="card-text">{{ people.first_name }}</div>
+      <div class="card-text">{{ people.last_name }}</div>
+    </div>
+  </div>
+  {% if user == people %}
+  <a href={% url 'accounts:update' %} class="btn btn-info">회원 정보 수정</a>
+  <a href={% url 'accounts:password' %} class="btn btn-info">비밀 번호 수정</a>
+  <a href={% url 'accounts:delete' %} class="btn btn-danger">회원 탈퇴</a>
+  {% endif %}
   <div class="row">
   {% for post in people.post_set.all %}
     <div class="col-4">
