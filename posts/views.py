@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST  # POST외의 요청 무시
 from django.contrib.auth.decorators import login_required  # 로그인 되어있을 때만 허용
 
-from .models import Post
-from .forms import PostForm
+from .models import Post, Comment
+from .forms import PostForm, CommentForm
 
 def create(request):
     if request.method == "POST":
@@ -20,8 +20,12 @@ def create(request):
 
 
 def list(request):
-    # 모든 포스트를 보여준다.
-    return render(request, 'instajs/list.html', {'posts': Post.objects.all()})
+    return render(request, 'instajs/list.html', {
+        # 모든 포스트를 보여준다.
+        'posts': Post.objects.all(),
+        # comment를 만드는 form을 보여줌
+        'comment_form': CommentForm(),
+    })
 
 
 def delete(request, post_id):
@@ -61,4 +65,30 @@ def like(request, post_id):
         post.like_users.add(request.user)
     
     return redirect('posts:list')
-        
+
+
+"""
+Comment
+"""
+
+
+@login_required
+@require_POST
+def comment_create(request, post_id):
+    """Comment 만드는 함수"""
+    post = get_object_or_404(Post, pk=post_id)
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.user = request.user
+        comment.post = post
+        comment.save()
+    return redirect('posts:list')
+
+
+def comment_remove(request, post_id, comment_id):
+    post = get_object_or_404(Post, pk=post_id)
+    comment = get_object_or_404(Comment, pk=comment_id)
+    if request.user in (post.user, comment.user):
+        comment.delete()
+    return redirect('posts:list')

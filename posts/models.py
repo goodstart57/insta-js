@@ -10,3 +10,11 @@ class Post(models.Model):
     like_users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="like_posts", blank=True)
     
     __str__ = __repr__ = lambda self: f"{self.id}) {self.content}"
+
+
+class Comment(models.Model):
+    content = models.CharField(max_length=150)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    
+    __str__ = __repr__ = lambda self: f"{self.id}) {self.user} => {self.post.user}: {self.content[:30]}"

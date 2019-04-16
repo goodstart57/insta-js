@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
 {% block body%}
   <div class="row justify-content-center">
     {% if posts %}
@@ -31,9 +34,31 @@
             <i class="far fa-heart liked"></i>
             {% endif %}
           </a>
-        </div>
-        <div class="card-text">
           {{ post.like_users.count }}명이 좋아합니다.
+        </div>
+        <div class="card-body">
+          <div class="card-text">
+            <!-- Comment ModelForm -->
+            <form action="{% url 'posts:comment_create' post.id %}" method="POST">
+              <!-- Bootstrap Form -->
+              {% bootstrap_form comment_form %}
+              {% csrf_token %}
+            </form>
+            <!-- 해당 글에 작성된 댓글을 모두 출력-->
+          </div>
+          {% for comment in post.comment_set.all %}
+          <div class="card-text">
+            <strong>{{ comment.user.username }}</strong>
+            <span>{{ comment.content }}</span>
+            <a href="{% url 'posts:comment_remove' post.id comment.id %}" class="text-danger">
+              <i class="fas fa-times"></i>
+            </a>
+          </div>
+          {% empty %}
+          <div class="card-text">
+            <span>댓글이 없습니다.</span>
+          </div>
+          {% endfor %}
         </div>
       </div>
       {% endfor %}
