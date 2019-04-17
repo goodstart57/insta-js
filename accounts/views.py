@@ -13,7 +13,11 @@ from django.contrib.auth.forms import (
 )
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from .forms import CustomUserChangeForm
+from .forms import (
+    CustomUserChangeForm,
+    ProfileForm,
+)
+from .models import Profile
 
 
 def login(request):
@@ -39,6 +43,7 @@ def signup(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            Profile.objects.create(user=user)
             auth_login(request, user)
         return redirect("posts:list")
     else:  # GET: 유저 정보 입력
@@ -60,15 +65,30 @@ def update(request):
     if request.method == "POST":
         user_change_form = CustomUserChangeForm(request.POST, instance=request.user)
         
+        profile = get_object_or_404(Profile, user=request.user)
+        profile_form = ProfileForm(request.POST, instance=profile)
+        
         if user_change_form.is_valid():
             user = user_change_form.save()
         else:
             user = request.user
         
+        if profile_form.is_valid():
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
+        
         return redirect("people", user.username)
     else:  # GET
         user_change_form = CustomUserChangeForm(instance=request.user)
-        return render(request, 'accounts/update.html', {'user_change_form': user_change_form})
+        
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        profile_form = ProfileForm(instance=profile)
+        
+        return render(request, 'accounts/update.html', {
+            'user_change_form': user_change_form,
+            'profile_form': profile_form,
+        })
 
 
 @login_required

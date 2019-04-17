@@ -25,7 +25,7 @@ SECRET_KEY = 'vqlnw3l9qn*5i7rntz+78lc#(f6aqatbgd*bcr$c2hi$69chh$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['insta-js-goodstart.c9users.io']
+ALLOWED_HOSTS = ['instagram-js-goodstart.c9users.io']
 
 
 # Application definition
@@ -122,6 +122,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    '/static/',
+]
 
 ## 이미지를 프로젝트에 저장하고 불러오도록 설정
 # 미디어 파일들이 불릴 URL

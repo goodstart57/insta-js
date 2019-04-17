@@ -10,12 +10,14 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="{% url 'posts:create' %}">Create</a>
+        <a class="nav-link" href="{% url 'posts:create' %}">글쓰러가기</a>
       </li>
+    </ul>
+    <ul class="navbar-nav">
       {% if user.is_authenticated %}
       <!-- 만약 로그인이 되어있으면 -->
       <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">{{ user.username }}</a>
+        <a class="nav-link" href="{% url 'people' user.username %}" tabindex="-1" aria-disabled="true">{{ user.username }}</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a>
