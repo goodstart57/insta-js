@@ -13,7 +13,9 @@
         <img src="https://picsum.photos/400/300/?random" class="card-img-top" alt="user image">
         {% endif %}
         <div class="card-header">
-          <span>{{ post.user }}</span>
+          <a href="{% url 'people' post.user.username %}">
+            <span>{{ post.user.username }}</span>
+          </a>
         </div>
         <div class="card-body">
           <p class="card-text">{{ post.content }}</p>
@@ -61,6 +63,8 @@
           {% endfor %}
         </div>
       </div>
+      {% empty %}
+      <p>다른 친구들을 팔로우 해보세요!</p>
       {% endfor %}
     {% endif %}
   </div>

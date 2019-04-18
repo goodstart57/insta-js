@@ -4,8 +4,19 @@
 <div class="container">
   <div class="card">
     <div class="card-body">
-      <h1 class="card-title">{{ people.username }}</h1>
-      <div class="card-text font-weight-bold">{{ people.profile.nickname }}</div>
+      <h1 class="card-title d-inline">{{ people.username }}</h1>
+      <form action="{% url 'accounts:follow' people.id %}" method="POST">
+        <!-- 만약 현재 접속한 유저가 해당 페이지의 유저를 이미 팔로우한 경우 -->
+        {% if user != people %}
+          {% if user in people.followers.all %}
+          <button class="btn btn-outline-primary" type="submit">unfollow</button>
+          {% else %}
+          <button class="btn btn-primary" type="submit">follow</button>
+          {% endif %}
+        {% endif %}
+        {% csrf_token %}
+      </form>
+      <div class="card-text mr-2 font-weight-bold">{{ people.profile.nickname }}</div>
       <hr/>
       <div class="card-text my-3">{{ people.profile.description }}</div>
       {% if user == people %}

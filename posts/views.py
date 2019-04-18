@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST  # POST외의 요청 무시
 from django.contrib.auth.decorators import login_required  # 로그인 되어있을 때만 허용
+from django.db.models import Q
 
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
@@ -20,9 +21,24 @@ def create(request):
 
 
 def list(request):
+    if request.user.is_authenticated:  # 로그인 체크
+        posts = Post.objects.filter(Q(user__in=request.user.followings.all()) | Q(user=request.user))
+    else:
+        posts = None
+        
+    """
+    posts = Post.objects.filter(user_id__in=request.user.followings.all())
+    
+    my_posts = request.user.post_set.all()
+    
+    posts.extends(my_posts)
+    
+    posts = posts.order_by('id')
+    """
+    
     return render(request, 'instajs/list.html', {
-        # 모든 포스트를 보여준다.
-        'posts': Post.objects.all(),
+        # 선택된 포스트를 보여준다.
+        'posts': posts,
         # comment를 만드는 form을 보여줌
         'comment_form': CommentForm(),
     })

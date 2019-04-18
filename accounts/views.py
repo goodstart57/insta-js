@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
 from django.contrib.auth import (
     login as auth_login,
     logout as auth_logout,
@@ -15,6 +16,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from .forms import (
     CustomUserChangeForm,
+    CustomUserCreationForm,
     ProfileForm,
 )
 from .models import Profile
@@ -40,14 +42,14 @@ def logout(request):
 
 def signup(request):
     if request.method == "POST":  # 유저 등록
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             Profile.objects.create(user=user)
             auth_login(request, user)
         return redirect("posts:list")
     else:  # GET: 유저 정보 입력
-        return render(request, 'accounts/signup.html', {'form': UserCreationForm()})
+        return render(request, 'accounts/signup.html', {'form': CustomUserCreationForm()})
 
 
 def people(request, username):
@@ -113,4 +115,25 @@ def password(request):
     else:
         password_chage_form = PasswordChangeForm(request.user)
         return render(request, 'accounts/password.html', {'password_chage_form': password_chage_form})
+
+
+@login_required
+@require_POST
+def follow(request, user_id):
+    person = get_object_or_404(get_user_model(), pk=user_id)
+    
+    if person == request.user:
+        return redirect('people', person.username)    
+    
+    # 만약 현재 유저가 해당 유저를 이미 팔로우 하고 있었으면,
+    #  -> 팔로우 취소
+    # 아니면
+    #  -> 팔로우
+    if person in request.user.followings.all():
+        request.user.followings.remove(person)
+    else:
+        request.user.followings.add(person)
+    
+    return redirect('people', person.username)
         
+    
