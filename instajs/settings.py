@@ -123,9 +123,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_DIRS = [
+STATICFILES_DIRS  = [
     os.path.join(BASE_DIR, 'static'),
-    '/static/',
 ]
 
 ## 이미지를 프로젝트에 저장하고 불러오도록 설정

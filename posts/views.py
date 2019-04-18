@@ -20,12 +20,9 @@ def create(request):
         return render(request, 'instajs/create.html', {'form': form})
 
 
+@login_required
 def list(request):
-    if request.user.is_authenticated:  # 로그인 체크
-        posts = Post.objects.filter(Q(user__in=request.user.followings.all()) | Q(user=request.user))
-    else:
-        posts = None
-        
+    posts = Post.objects.filter(Q(user__in=request.user.followings.all()) | Q(user=request.user))
     """
     posts = Post.objects.filter(user_id__in=request.user.followings.all())
     

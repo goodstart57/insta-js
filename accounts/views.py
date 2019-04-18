@@ -68,7 +68,7 @@ def update(request):
         user_change_form = CustomUserChangeForm(request.POST, instance=request.user)
         
         profile = get_object_or_404(Profile, user=request.user)
-        profile_form = ProfileForm(request.POST, instance=profile)
+        profile_form = ProfileForm(data=request.POST, files=request.FILES, instance=profile)
         
         if user_change_form.is_valid():
             user = user_change_form.save()

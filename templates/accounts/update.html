@@ -4,7 +4,7 @@
 
 {% block body %}
 <h1 class="text-center">회원 정보 수정</h1>
-<form method="POST" class="my-4">
+<form method="POST" class="my-4" enctype="multipart/form-data">
   {% bootstrap_form user_change_form %}
   {% bootstrap_form profile_form %}
   <button type="submit" class="btn btn-primary w-100">수정하기</button>
